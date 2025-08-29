@@ -33,6 +33,12 @@ jobs:
           make defconfig
           make package/luci-app-nikki/compile
           make package/feeds/tcp_brutal/tcp-brutal/compile
+      - name: 0x05 - prepare brutal plugin files
+        run: |
+          mkdir -p brutal-artifacts
+          find immortalwrt-sdk-24.10.2-x86-64_gcc-13.3.0_musl.Linux-x86_64/bin -name "*kmod-brutal*" -type f -exec cp {} brutal-artifacts/ \;
+          find immortalwrt-sdk-24.10.2-x86-64_gcc-13.3.0_musl.Linux-x86_64/bin -name "*tcp-brutal*" -type f -exec cp {} brutal-artifacts/ \;
+          ls -la brutal-artifacts/
       - uses: actions/upload-artifact@v4
         with:
           name: openwrt-nikki-ipk
@@ -40,4 +46,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: openwrt-brutal-ipk
-          path: immortalwrt-sdk-24.10.2-x86-64_gcc-13.3.0_musl.Linux-x86_64/bin/targets/x86/64/packages
+          path: brutal-artifacts
