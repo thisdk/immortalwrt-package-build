@@ -21,28 +21,28 @@ jobs:
             upx-ucl unzip vim wget xmlto xxd zlib1g-dev zstd
       - name: 0x02 - firmware update install
         run: |
-          wget https://downloads.immortalwrt.org/releases/24.10.2/targets/x86/64/immortalwrt-sdk-24.10.2-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
-          tar -xf immortalwrt-sdk-24.10.2-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst --zstd
-          cd immortalwrt-sdk-24.10.2-x86-64_gcc-13.3.0_musl.Linux-x86_64
+          wget https://downloads.immortalwrt.org/releases/24.10.3/targets/x86/64/immortalwrt-sdk-24.10.3-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
+          tar -xf immortalwrt-sdk-24.10.3-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst --zstd
+          cd immortalwrt-sdk-24.10.3-x86-64_gcc-13.3.0_musl.Linux-x86_64
           echo "src-git nikki https://github.com/nikkinikki-org/OpenWrt-nikki.git;main" >> "feeds.conf.default"
           echo "src-git tcp_brutal https://github.com/haruue-net/openwrt-tcp-brutal.git;master" >> "feeds.conf.default"
           ./scripts/feeds update -a && ./scripts/feeds install -a
       - name: 0x04 - firmware start build !!
         run: |
-          cd immortalwrt-sdk-24.10.2-x86-64_gcc-13.3.0_musl.Linux-x86_64
+          cd immortalwrt-sdk-24.10.3-x86-64_gcc-13.3.0_musl.Linux-x86_64
           make defconfig
           make package/luci-app-nikki/compile
           make package/feeds/tcp_brutal/tcp-brutal/compile
       - name: 0x05 - prepare brutal plugin files
         run: |
           mkdir -p brutal-artifacts
-          find immortalwrt-sdk-24.10.2-x86-64_gcc-13.3.0_musl.Linux-x86_64/bin -name "*kmod-brutal*" -type f -exec cp {} brutal-artifacts/ \;
-          find immortalwrt-sdk-24.10.2-x86-64_gcc-13.3.0_musl.Linux-x86_64/bin -name "*tcp-brutal*" -type f -exec cp {} brutal-artifacts/ \;
+          find immortalwrt-sdk-24.10.3-x86-64_gcc-13.3.0_musl.Linux-x86_64/bin -name "*kmod-brutal*" -type f -exec cp {} brutal-artifacts/ \;
+          find immortalwrt-sdk-24.10.3-x86-64_gcc-13.3.0_musl.Linux-x86_64/bin -name "*tcp-brutal*" -type f -exec cp {} brutal-artifacts/ \;
           ls -la brutal-artifacts/
       - uses: actions/upload-artifact@v4
         with:
           name: openwrt-nikki-ipk
-          path: immortalwrt-sdk-24.10.2-x86-64_gcc-13.3.0_musl.Linux-x86_64/bin/packages/x86_64/nikki
+          path: immortalwrt-sdk-24.10.3-x86-64_gcc-13.3.0_musl.Linux-x86_64/bin/packages/x86_64/nikki
       - uses: actions/upload-artifact@v4
         with:
           name: openwrt-brutal-ipk
